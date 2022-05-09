@@ -1,0 +1,65 @@
+[{
+  "_id": {
+    "$oid": "62675883da23763e12594895"
+  },
+  "first_name": "Thanh",
+  "last_name": "Dat",
+  "email": "thanhdat123@gmail.com",
+  "password": "$2a$10$vcHuF9FQLXu0X3ZZADlbve2.XSQ.GhuxI.knTjXLy/k5v.W6geHMy",
+  "address": "Thu Duc",
+  "role": "admin",
+  "created_at": {
+    "$date": "2022-04-26T02:27:15.204Z"
+  },
+  "gender": "male",
+  "__v": 0,
+  "otp_code": "645092"
+},{
+  "_id": {
+    "$oid": "626775bf539f87d8a7ab8001"
+  },
+  "first_name": "Sang",
+  "last_name": "Gay",
+  "email": "sanggay@gmail.com",
+  "password": "$2a$10$DNnQnncpr8vDwuD6cFO9z.3drG.KryanrjcoGvPgF1Ye3lquAgxxG",
+  "address": "Thu Duc",
+  "role": "manager",
+  "created_at": {
+    "$date": "2022-04-26T04:31:59.093Z"
+  },
+  "gender": "male",
+  "__v": 0,
+  "otp_code": "825356"
+},{
+  "_id": {
+    "$oid": "6269fea659bd16ae762a7338"
+  },
+  "first_name": "Sang",
+  "last_name": "Gay Ne",
+  "email": "epzaiep@gmail.com",
+  "password": "$2a$10$odGxx2Bx6B5jLKjWMqQ67uZMagPgFTA524eL/JHHHAAnAdOy/FBsy",
+  "address": "Thu Duc",
+  "role": "user",
+  "created_at": {
+    "$date": "2022-04-28T02:40:38.672Z"
+  },
+  "gender": "female",
+  "otp_code": "678042",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6274f337eba1ddeff33e2e57"
+  },
+  "first_name": "Hihi",
+  "last_name": "Haha",
+  "email": "abc@gmail.com",
+  "password": "$2a$10$lS5c0IID7AGJI86KKeGqme9BJ6TetpGWTarHLW4HBK4NdXTxegWs6",
+  "address": "Thu Duc",
+  "role": "manager",
+  "created_at": {
+    "$date": "2022-05-06T10:06:47.601Z"
+  },
+  "gender": "female",
+  "otp_code": null,
+  "__v": 0
+}]
