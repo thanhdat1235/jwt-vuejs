@@ -43,7 +43,7 @@ app.post("/register", async (req, res) => {
     const oldUser = await User.findOne({ email });
 
     if (oldUser) {
-      return res.status(409).send("User Already Exist. Please Login");
+      return res.status(409).send({ messages: "Email already exists" });
     }
 
     encryptedPassword = await bcryptjs.hash(password, 10);
@@ -161,7 +161,7 @@ app.patch("/users/:id", auth, authAdminRole, async (req, res) => {
 let randomFixedInteger = function (length) {
   return Math.floor(
     Math.pow(10, length - 1) +
-      Math.random() * (Math.pow(10, length) - Math.pow(10, length - 1) - 1)
+    Math.random() * (Math.pow(10, length) - Math.pow(10, length - 1) - 1)
   );
 };
 
