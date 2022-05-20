@@ -46,8 +46,8 @@ app.post("/register", async (req, res) => {
       return res.status(409).send({ messages: "Email already exists" });
     }
 
+    const otp_code = randomFixedInteger(6);
     encryptedPassword = await bcryptjs.hash(password, 10);
-
     const user = await User.create({
       first_name,
       last_name,
@@ -56,11 +56,22 @@ app.post("/register", async (req, res) => {
       created_at: new Date(),
       gender,
       address,
-      otp_code: null,
+      otp_code: otp_code,
       role: "user",
     });
 
-    res.status(201).json(user);
+    if (!user) {
+      return res.status(404).send({ message: "Create account failed" });
+    }
+    console.log(user);
+    const subject = "Mã xác thực OTP";
+    const htmlContent = `<p>Ma OTP cua ban la: ${otp_code}</p>`;
+    const resSendEmail = await sendEmail(email, subject, htmlContent);
+    if (!resSendEmail)
+      return res.status(500).send({ message: "Send OTP failed" });
+    return res
+      .status(201)
+      .send({ message: "OTP sended to your email account" });
   } catch (err) {
     throw err;
   }
@@ -106,8 +117,33 @@ app.get("/users/:id", auth, async (req, res) => {
 });
 
 app.get("/users", auth, async (req, res) => {
-  const users = await User.find({}, { password: 0 });
-  return res.status(200).json(users);
+  const pageSize = parseInt(req.query.pageSize);
+  const page = parseInt(req.query.page);
+  const skip = (page - 1) * pageSize;
+  User.countDocuments({}, async function (err, count) {
+    if (err) {
+      console.log(err);
+    } else {
+      const totalElements = count;
+      const totalPages = Math.ceil(totalElements / pageSize);
+      await User.find({}, { password: 0 })
+        .skip(skip)
+        .limit(pageSize)
+        .then((data) => {
+          const numberOfElements = data.length;
+          res.status(201).json({
+            data,
+            totalElements,
+            totalPages,
+            numberOfElements,
+            pageAble: { page, pageSize },
+          });
+        })
+        .catch((err) => {
+          res.status(500).json("Error server");
+        });
+    }
+  });
 });
 
 app.put("/users/:id", auth, authManagerRole, async (req, res) => {
@@ -129,6 +165,19 @@ app.delete("/users/:id", auth, authAdminRole, async (req, res) => {
     });
   } catch (error) {
     throw error;
+  }
+});
+
+// Delete many
+app.delete("/users", auth, authAdminRole, async (req, res) => {
+  try {
+    const ids = req.body.ids;
+    console.log(ids);
+    await User.remove({ _id: { $in: ids } });
+    return res.status(200).send("Delete successfully");
+  } catch (error) {
+    console.error(error);
+    throw new Error({ message: "Loi roi" });
   }
 });
 
@@ -161,7 +210,7 @@ app.patch("/users/:id", auth, authAdminRole, async (req, res) => {
 let randomFixedInteger = function (length) {
   return Math.floor(
     Math.pow(10, length - 1) +
-    Math.random() * (Math.pow(10, length) - Math.pow(10, length - 1) - 1)
+      Math.random() * (Math.pow(10, length) - Math.pow(10, length - 1) - 1)
   );
 };
 
@@ -247,6 +296,8 @@ app.post("/verify-otp/:email", async (req, res) => {
   }
   return res.status(200).send({ message: "Verify OTP successfully" });
 });
+
+//
 
 // Reset password
 app.post("/reset-password/:email", async (req, res) => {
